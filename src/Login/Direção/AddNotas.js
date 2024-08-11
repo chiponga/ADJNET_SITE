@@ -2,9 +2,9 @@ import { View, Text, ImageBackground, TouchableOpacity, Dimensions, TextInput, A
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 import './../../Css/App.css'
-import Estilo from './../../Css/Entrada.js';
-import { Criptografar, Descriptografar } from './../../Cripto/index.js'
-import Cabecalho from './../ButtonSair/index.js'
+import Estilo from '../../Css/Entrada.js';
+import { Criptografar, Descriptografar } from '../../Cripto/index.js'
+import Cabecalho from '../ButtonSair/index.js'
 import Socket from '../../Socket/index.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
