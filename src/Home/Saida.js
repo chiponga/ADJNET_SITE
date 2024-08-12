@@ -25,12 +25,12 @@ export default function Home() {
     useEffect(() => {
 
         setTimeout(() => setLoop(loop + 1), 1000)
-        
+
         inputRef.current.focus();
         restartServer()
 
-        if(loop !== 1200) return 
-        
+        if (loop !== 1200) return
+
         setHoras('--:--:--');
         setNome('--:--:--');
         setAtrasos('--:--:--');
@@ -113,26 +113,31 @@ export default function Home() {
 
                     index: 0,
                     routes: [{ name: 'Entrada' }],
-        
+
                 });
             }
         }
     }
+    const screenDimensions = Dimensions.get('screen');
+    const windowDimensions = Dimensions.get('window');
+    const isPortrait = screenDimensions.height > screenDimensions.width;
+
+    const imageHeight = isPortrait ? 0.60 * windowDimensions.height : '75%';
+    const imageWidth = isPortrait ? 0.70 * windowDimensions.width : '25%';
 
 
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={require("./../Assets/Fundo.jpg")} resizeMode='cover' style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }} >
-                <img
-                    src={`data:image/jpeg;base64,${foto}`}
-                    height={Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.60 * Dimensions.get("window").height : height = '75%'}
-                    width={Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.70 * Dimensions.get("window").width : width = '25%'}
-                    onError={(e) => {
-                        e.target.src = 'Fotos/index.jpg' // some replacement image
-                        e.target.style = 'height: ' + Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.60 * Dimensions.get("window").height : height = '75%' + '; width: ' + Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.60 * Dimensions.get("window").width : width = '25%' + '' // inline styles in html format
-                    }}
-
-                />
+            <Image
+                source={foto ? { uri: `data:image/jpeg;base64,${foto}` } : require('./../../Fotos/index.jpg')}
+                style={ { height: imageHeight, width: imageWidth }}
+                onError={() => {
+                    this.setState({
+                        fallback: require('./../../Fotos/index.jpg')
+                    });
+                }}
+            />
 
                 <View style={Estilo.ViewNome} >
                     <Text style={Estilo.TextNome}>
@@ -155,7 +160,7 @@ export default function Home() {
                             {Atrasos}
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.reset({index: 0, routes:[{ name: 'Entrada' }]})} style={Estilo.ViewTipo} >
+                    <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Entrada' }] })} style={Estilo.ViewTipo} >
                         <Text style={Estilo.TextTipo}>
                             SAIDA
                         </Text>

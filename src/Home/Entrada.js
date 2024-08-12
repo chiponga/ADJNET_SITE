@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ImageBackground, Dimensions } from 'react-native';
+import { View, Text, TextInput, ImageBackground, Dimensions, Image } from 'react-native';
 import Estilo from '../Css/Entrada'
 import { useState, useRef, useEffect } from 'react';
 import { getData, getRandomInt } from '../Gerador/index'
@@ -13,7 +13,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function Home() {
-    const [foto, setFotos] = useState('index')
+    const [foto, setFotos] = useState(null)
     const [input, setInput] = useState('')
     const [Horas, setHoras] = useState('--:--:--')
     const [Nome, setNome] = useState('--:--:--')
@@ -41,7 +41,7 @@ export default function Home() {
         setNome('--:--:--');
         setAtrasos('--:--:--');
         setTurmas('--:--:--');
-        setFotos('');
+        setFotos(null);
         setAtivador('');
         setLoop(0)
 
@@ -116,7 +116,7 @@ export default function Home() {
             setNome('--:--:--');
             setAtrasos('--:--:--');
             setTurmas('--:--:--');
-            setFotos('');
+            setFotos(null);
             setAtivador('');
             Download.AlunoNaoEncontrado();
         }
@@ -170,20 +170,26 @@ export default function Home() {
         }
     }
 
+    const screenDimensions = Dimensions.get('screen');
+    const windowDimensions = Dimensions.get('window');
+    const isPortrait = screenDimensions.height > screenDimensions.width;
+
+    const imageHeight = isPortrait ? 0.60 * windowDimensions.height : '75%';
+    const imageWidth = isPortrait ? 0.70 * windowDimensions.width : '25%';
+
 
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={require("./../Assets/Fundo.jpg")} resizeMode='cover' style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }} >
-                <img
-                    src={`data:image/jpeg;base64,${foto}`}
-                    height={Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.60 * Dimensions.get("window").height : height = '75%'}
-                    width={Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.70 * Dimensions.get("window").width : width = '25%'}
-                    onError={(e) => {
-                        e.target.src = 'Fotos/index.jpg' // some replacement image
-                        e.target.style = 'height: ' + Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.60 * Dimensions.get("window").height : height = '75%' + '; width: ' + Dimensions.get('screen').height > Dimensions.get('screen').width ? 0.60 * Dimensions.get("window").width : width = '25%' + '' // inline styles in html format
-                    }}
-
-                />
+            <Image
+                source={foto ? { uri: `data:image/jpeg;base64,${foto}` } : require('./../../Fotos/index.jpg')}
+                style={ { height: imageHeight, width: imageWidth }}
+                onError={() => {
+                    this.setState({
+                        fallback: require('./../../Fotos/index.jpg')
+                    });
+                }}
+            />
 
                 <View style={Estilo.ViewNome} >
                     <Text style={Estilo.TextNome}>
